@@ -30,16 +30,16 @@ class CLientController extends Controller
             'email' => 'required',
             'phone' => 'required'
         ]);
-        $cLient = new CLient;
-        $cLient -> name = $request -> name;
-        $cLient -> lastname = $request -> lastname;
-        $cLient -> email = $request -> email;
-        $cLient -> phone = $request -> phone;
-        $cLient -> save();
+        $client = new CLient;
+        $client -> name = $request -> name;
+        $client -> lastname = $request -> lastname;
+        $client -> email = $request -> email;
+        $client -> phone = $request -> phone;
+        $client -> save();
 
-        event_participantes::dispatch();
+        event(new event_participantes($client));
 
-        return $cLient;
+        return $client;
     }
 
 
@@ -47,46 +47,53 @@ class CLientController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\CLient  $cLient
+     * @param  \App\Models\CLient  $client
      * @return \Illuminate\Http\Response
      */
-    public function show(CLient $cLient)
+    public function show($id)
     {
-        return $cLient;
+        $client = CLient::find($id);
+        return $client;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CLient  $cLient
+     * @param  \App\Models\CLient  $client
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CLient $cLient)
+    public function update(Request $request, CLient $client, $id)
     {
         $request -> validate([
             'email' => 'required',
             'phone' => 'required'
         ]);
         
-        $cLient -> name = $request -> name;
-        $cLient -> lastname = $request -> lastname;
-        $cLient -> email = $request -> email;
-        $cLient -> phone = $request -> phone;
-        $cLient -> update();
+        $client = CLient::find($id);
+        $client -> name = $request -> name;
+        $client -> lastname = $request -> lastname;
+        $client -> email = $request -> email;
+        $client -> phone = $request -> phone;
+        $client -> update();
 
-        return $cLient;
+        return $client;
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\CLient  $cLient
+     * @param  \App\Models\CLient  $client
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CLient $cLient)
+    public function destroy(CLient $client, $id)
     {
-        $cLient -> delete();
+        $client = CLient::find($id);
+
+        if(is_null($client)){
+            return response()->json('no se pudo realizar correctamente la operacion', 404);
+        }
+        $client -> delete();
         return response() ->noContent(); 
     }
 }
