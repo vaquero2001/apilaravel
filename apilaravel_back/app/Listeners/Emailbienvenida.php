@@ -38,7 +38,7 @@ class Emailbienvenida
             $mail->Host       = 'smtp.gmail.com';  
             $mail->SMTPAuth   = true;
             $mail->Username   = 'ivancitoenano27@gmail.com';     
-            $mail->Password   = 'ib18272001';     
+            $mail->Password   = '';     
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port       = 587;                
 

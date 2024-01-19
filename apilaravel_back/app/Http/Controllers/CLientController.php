@@ -27,17 +27,26 @@ class CLientController extends Controller
     public function store(Request $request)
     {
         $request -> validate([
-            'email' => 'required',
+            'name'  => 'required|string|max:255',
+            'lastname'  => 'required|string|max:255',
+            'email' => 'required|email|string|max:255',
             'phone' => 'required'
         ]);
-        $client = new CLient;
-        $client -> name = $request -> name;
-        $client -> lastname = $request -> lastname;
-        $client -> email = $request -> email;
-        $client -> phone = $request -> phone;
-        $client -> save();
 
-        event(new event_participantes($client));
+        try{
+            $client = new CLient;
+            $client -> name = $request -> name;
+            $client -> lastname = $request -> lastname;
+            $client -> email = $request -> email;
+            $client -> phone = $request -> phone;
+            $client -> save();
+
+            event(new event_participantes($client));
+            return response()->json(['message' => 'Cliente guardado con éxito', 'client' => $client], 200);
+        }
+        catch (\Exception $e){
+            return response()->json(['error' => 'Error al guardar el cliente', 'message' => $e->getMessage()], 500);
+        }
 
         return $client;
     }
@@ -52,7 +61,14 @@ class CLientController extends Controller
      */
     public function show($id)
     {
-        $client = CLient::find($id);
+        
+        try{
+            $client = CLient::find($id);    
+            return response()->json(['message' => 'Cliente encontrado con éxito', 'client' => $client], 200);
+        }
+        catch (\Exception $e){
+            return response()->json(['error' => 'Error al encontrar al cliente', 'message' => $e->getMessage()], 500);
+        }
         return $client;
     }
 
@@ -66,7 +82,9 @@ class CLientController extends Controller
     public function update(Request $request, CLient $client, $id)
     {
         $request -> validate([
-            'email' => 'required',
+            'name'  => 'required|string|max:255',
+            'lastname'  => 'required|string|max:255',
+            'email' => 'required|email|string|max:255',
             'phone' => 'required'
         ]);
         
