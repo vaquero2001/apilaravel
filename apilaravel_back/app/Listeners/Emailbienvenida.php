@@ -38,18 +38,18 @@ class Emailbienvenida
             $mail->Host       = 'smtp.gmail.com';  
             $mail->SMTPAuth   = true;
             $mail->Username   = 'ivancitoenano27@gmail.com';     
-            $mail->Password   = '';     
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port       = 587;                
+            $mail->Password   = 'wxka rjwe qjjb dkav';     
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $mail->Port       = 465;                
 
         // Destinatarios
-            $mail->setFrom('ivancitoenano27@gmail.com', 'Mailer');
+            $mail->setFrom('empresa@gmail.com', 'Empresa');
             $mail->addAddress($event-> client-> email);     
 
         // Contenido del correo
             $mail->isHTML(true);                                  
             $mail->Subject = 'Mensaje de bienvenida';
-            $mail->Body    = 'Bienvenido, se a registrado correctamente';
+            $mail->Body    = 'Bienvenido, se ha registrado correctamente';
             $mail->AltBody = 'bienvenido';
 
             $mail->send();
