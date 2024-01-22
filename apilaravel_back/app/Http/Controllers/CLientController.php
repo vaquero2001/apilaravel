@@ -48,7 +48,7 @@ class CLientController extends Controller
             return response()->json(['error' => 'Error al guardar el cliente', 'message' => $e->getMessage()], 500);
         }
 
-        return $client;
+    
     }
 
 
@@ -69,7 +69,6 @@ class CLientController extends Controller
         catch (\Exception $e){
             return response()->json(['error' => 'Error al encontrar al cliente', 'message' => $e->getMessage()], 500);
         }
-        return $client;
     }
 
     /**
