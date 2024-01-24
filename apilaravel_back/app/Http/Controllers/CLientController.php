@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CLient;
 use Illuminate\Http\Request;
 use App\Events\event_participantes;
+use Illuminate\Support\Facades\Validator;
 
 class CLientController extends Controller
 {
@@ -15,7 +16,7 @@ class CLientController extends Controller
      */
     public function index()
     {
-        return CLient::all();
+        return response ()-> json(['status' => true]); 
     }
 
     /**
@@ -26,39 +27,41 @@ class CLientController extends Controller
      */
     public function store(Request $request)
     {
-        $request -> validate([
-            'name'  => 'required|string|max:255',
-            'lastname'  => 'required|string|max:255',
-            'email' => 'required|email|string|max:255',
+        $validator = Validator::make($request->all(),[
+            'name'  => 'required|string|min:3|max:255',
+            'lastname'  => 'required|string|min:3|max:255',
+            'email' => 'required|email|min:3|string|max:255',
             'phone' => 'required'
         ]);
 
-        try{
-            $client = new CLient;
-            $client -> name = $request -> name;
-            $client -> lastname = $request -> lastname;
-            $client -> email = $request -> email;
-            $client -> phone = $request -> phone;
-            $client -> save();
-
-            event(new event_participantes($client));
-            return response()->json(['message' => 'Cliente guardado con éxito', 'client' => $client], 200);
-        }
-        catch (\Exception $e){
-            return response()->json(['error' => 'Error al guardar el cliente', 'message' => $e->getMessage()], 500);
+        if($validator->fails()){
+            return response()-> json([
+                'status'=> false,
+                'errors' => $validator->errors(),
+                'message' => "Ha ocurrido un error al realizar el registro, verifique los datos"
+            ], 500); 
         }
 
+
+        $client = new CLient;
+        $client -> name = $request -> name;
+        $client -> lastname = $request -> lastname;
+        $client -> email = $request -> email;
+        $client -> phone = $request -> phone;
+        $client -> save();
+
+        event(new event_participantes($client));
+        
+        return response()-> json([
+            'status' => true,
+            'message' => 'Cliente creado con éxito.'
+        ], 200); 
     
     }
 
 
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\CLient  $client
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         
@@ -71,46 +74,4 @@ class CLientController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CLient  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, CLient $client, $id)
-    {
-        $request -> validate([
-            'name'  => 'required|string|max:255',
-            'lastname'  => 'required|string|max:255',
-            'email' => 'required|email|string|max:255',
-            'phone' => 'required'
-        ]);
-        
-        $client = CLient::find($id);
-        $client -> name = $request -> name;
-        $client -> lastname = $request -> lastname;
-        $client -> email = $request -> email;
-        $client -> phone = $request -> phone;
-        $client -> update();
-
-        return $client;
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\CLient  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(CLient $client, $id)
-    {
-        $client = CLient::find($id);
-
-        if(is_null($client)){
-            return response()->json('no se pudo realizar correctamente la operacion', 404);
-        }
-        $client -> delete();
-        return response() ->noContent(); 
-    }
 }
