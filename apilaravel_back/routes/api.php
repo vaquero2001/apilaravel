@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CLientController;
+use App\Http\Controllers\ClientController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,7 +14,7 @@ use App\Http\Controllers\CLientController;
 |
 */
 
-Route::apiResource('clientes', CLientController::class);
+Route::apiResource('clientes', ClientController::class);
 
 
 

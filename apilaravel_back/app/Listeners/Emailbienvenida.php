@@ -53,7 +53,7 @@ class Emailbienvenida
             $mail->AltBody = 'bienvenido';
 
             $mail->send();
-            echo 'El mensaje ha sido enviado';
+            echo 'Correo enviado, revise su correo electronico';
         }
         catch (Exception $e) {
             echo "El mensaje no pudo ser enviado. Mailer Error: {$mail->ErrorInfo}";

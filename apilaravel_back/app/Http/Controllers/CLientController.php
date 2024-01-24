@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CLient;
+use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Events\event_participantes;
 use Illuminate\Support\Facades\Validator;
 
-class CLientController extends Controller
+class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,8 +30,8 @@ class CLientController extends Controller
         $validator = Validator::make($request->all(),[
             'name'  => 'required|string|min:3|max:255',
             'lastname'  => 'required|string|min:3|max:255',
-            'email' => 'required|email|min:3|string|max:255',
-            'phone' => 'required'
+            'email' => 'required|email',
+            'phone' => 'required|min:7|max:15'
         ]);
 
         if($validator->fails()){
@@ -51,7 +51,7 @@ class CLientController extends Controller
         $client -> save();
 
         event(new event_participantes($client));
-        
+
         return response()-> json([
             'status' => true,
             'message' => 'Cliente creado con éxito.'
@@ -65,12 +65,21 @@ class CLientController extends Controller
     public function show($id)
     {
         
-        try{
-            $client = CLient::find($id);    
-            return response()->json(['message' => 'Cliente encontrado con éxito', 'client' => $client], 200);
-        }
-        catch (\Exception $e){
-            return response()->json(['error' => 'Error al encontrar al cliente', 'message' => $e->getMessage()], 500);
+        $client = Client::find($id);    
+
+        if ($client) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Cliente encontrado con éxito',
+                'client' => $client
+            ], 200);
+
+        } 
+        else {
+            return response()->json([
+                'status' => false,
+                'error' => 'Cliente no encontrado'
+            ], 404); 
         }
     }
 

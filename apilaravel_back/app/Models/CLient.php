@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class CLient extends Model
+class Client extends Model
 {
-    
+    protected $table = 'c_lients';
     use HasFactory;
 }
