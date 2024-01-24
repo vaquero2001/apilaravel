@@ -9,22 +9,8 @@ use Illuminate\Support\Facades\Validator;
 
 class ClientController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return response ()-> json(['status' => true]); 
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
@@ -67,20 +53,18 @@ class ClientController extends Controller
         
         $client = Client::find($id);    
 
-        if ($client) {
-            return response()->json([
-                'status' => true,
-                'message' => 'Cliente encontrado con éxito',
-                'client' => $client
-            ], 200);
-
-        } 
-        else {
+        if (!$client) {
             return response()->json([
                 'status' => false,
                 'error' => 'Cliente no encontrado'
             ], 404); 
-        }
+        } 
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Cliente encontrado con éxito',
+            'client' => $client
+        ], 200);
     }
 
 }
