@@ -9,7 +9,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\CLient;
+use App\Models\Client;
 
 class event_participantes
 {
@@ -22,7 +22,7 @@ class event_participantes
      *
      * @return void
      */
-    public function __construct(CLient $client)
+    public function __construct(Client $client)
     {
         $this -> client = $client;
     }
