@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
-use App\Events\event_participantes;
+use App\Events\EventEmail;
 use Illuminate\Support\Facades\Validator;
 
 class ClientController extends Controller
@@ -36,7 +36,7 @@ class ClientController extends Controller
         $client -> phone = $request -> phone;
         $client -> save();
 
-        event(new event_participantes($client));
+        event(new EventEmail($client));
 
         return response()-> json([
             'status' => true,
